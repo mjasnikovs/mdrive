@@ -1,0 +1,85 @@
+Rc = 99
+Hc = 5
+Ms = 200
+A = 100000
+D = 400000
+Vi = 2000
+Vm = 768000
+
+Ee = 1      'Enable encoder
+CP          'Clear programms
+R4 = 1      'Homing false
+R3 = 0      'R3
+R2 = 0      'R2
+R1 = 0      'Move 0
+St = 0      'Clear the stall flag
+Er = 0      'Clear the error flag
+P = 0       'Postion to 0
+Sm = 0
+
+Lg = 2147483647 'Set roto lag limit
+Tq = 100 'Torque
+As = 2 'Torque flag
+CF
+
+VA X1 = 0
+
+PG 1 'Start Programming mode
+                PR "Programming mode"
+                'Main program
+                LB G1
+                                CL K7, R4 = 0     'Call homing
+                                CL K9, R1 < 0    'Call program end
+                                CL K0, R1 >= 0     'Call sub program 
+                                BR G1
+                E
+
+  'Subroutines
+
+  'Sub Program
+  LB K0
+                  PR "Movement to: " R1
+                  MA R1
+                  H
+                  R1 = -1
+                  PR "Movement End"
+                RT
+
+  'Homing
+  LB K7
+                  PR "Homing"
+                  P 0
+                  St 0
+                  Er 0
+                  SL 2000
+                  H 800
+                  SL -500000
+                  CL K8
+                  SL 0
+                  R4 = 1
+                  PR "Homing Done"
+                  MR -1000
+                  P = 0
+                  PR "Position: " P
+                RT
+
+  'Homing loop until stall
+  LB K8
+                  R3 = P
+                  H 500
+                  X1 = R3 - 1000
+                  PR "X1 " X1
+                  PR "P " P
+                  BR K8, P < X1 
+  RT
+
+  'End Program
+  LB K9
+                  PR "Error: " Er
+                  PR "EOF"
+                  E
+  RT
+
+PG 'End Programming mode
+
+S 'Save to NVM
