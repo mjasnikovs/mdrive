@@ -14,7 +14,7 @@ const paranymphSync = function(l, c) {
 program
   .version('0.0.1')
   .option('-t, --test', 'Test connection')
-  .option('-h, --home', 'Homeing')
+  .option('-h, --home', 'Homing with hardlock')
   .option('-m, --move [distance]', 'Move to position [distance] cm')
   .parse(process.argv)
 
