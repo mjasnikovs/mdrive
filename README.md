@@ -1,5 +1,7 @@
 ### The MDrive Plus EtherNet/IP is a NEMA size 23 high torque 1.8° stepper motor node.js integration test
 
+![alt tag](http://i.imgur.com/b7MZ0uG.jpg)
+
 ```
 >node server.js --help
 
